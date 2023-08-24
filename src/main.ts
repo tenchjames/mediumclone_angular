@@ -11,14 +11,26 @@ import { provideEffects } from '@ngrx/effects';
 import * as authEffects from './app/auth/store/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { authInterceptor } from './app/shared/services/authinterceptor';
+import * as feedEffects from './app/shared/components/feed/store/effects';
+import * as popularTags from './app/shared/components/populartags/store/effects';
+import {
+  feedFeatureKey,
+  feedReducer,
+} from './app/shared/components/feed/store/reducers';
+import {
+  popularTagReducer,
+  popularTagsFeatureKey,
+} from './app/shared/components/populartags/store/reducers';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(appRoutes),
     provideStore({ router: routerReducer }),
     provideState(authFeatureKey, authReducer),
+    provideState(feedFeatureKey, feedReducer),
+    provideState(popularTagsFeatureKey, popularTagReducer),
     provideRouterStore(),
-    provideEffects(authEffects),
+    provideEffects(authEffects, feedEffects, popularTags),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
