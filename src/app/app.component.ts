@@ -11,9 +11,9 @@ import { authActions } from './auth/store/actions';
   imports: [RouterOutlet, TopBarComponent],
 })
 export class AppComponent implements OnInit {
-  constructor(private store: Store) {}
+constructor(private store: Store) {}
 
-  ngOnInit() {
+ngOnInit() {
     this.store.dispatch(authActions.getCurrentUser());
   }
 }

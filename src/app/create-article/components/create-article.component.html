@@ -1,0 +1,5 @@
+<ng-container *ngIf="vm$ | async as vm">
+    <mc-article-form [initialValues]="initialValues" [isSubmitting]="vm.isSubmitting" [errors]="vm.backendErrors"
+        (articleSubmit)="onSubmit($event)"></mc-article-form>
+
+</ng-container>

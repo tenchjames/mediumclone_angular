@@ -118,3 +118,43 @@ export const redirectAfterLoginEffect = createEffect(
     dispatch: false,
   }
 );
+
+export const updateCurrentUserEffect = createEffect(
+  (actions$ = inject(Actions), authService = inject(AuthService)) => {
+    return actions$.pipe(
+      ofType(authActions.updateCurrentUser),
+      switchMap(({ currentUserRequest }) => {
+        return authService.updateCurrentUser(currentUserRequest).pipe(
+          map((currentUser: CurrentUserInterface) => {
+            return authActions.updateCurrentUserSuccess({ currentUser });
+          }),
+          catchError((errorResponse: HttpErrorResponse) =>
+            of(
+              authActions.updateCurrentUserFailure({
+                errors: errorResponse.error.errors,
+              })
+            )
+          )
+        );
+      })
+    );
+  },
+  { functional: true }
+);
+
+export const logoutEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router),
+    persistenceService = inject(PersistenceService)
+  ) => {
+    return actions$.pipe(
+      ofType(authActions.logout),
+      tap(() => {
+        persistenceService.set('accessToken', '');
+        router.navigateByUrl('/');
+      })
+    );
+  },
+  { functional: true, dispatch: false }
+);
